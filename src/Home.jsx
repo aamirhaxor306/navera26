@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Home as HomeIcon, Calendar, Star, Trophy, LogOut, ShieldCheck, ChevronRight } from 'lucide-react';
+import { Home as HomeIcon, Calendar, Star, Trophy, LogOut, ShieldCheck, ChevronRight, Instagram, Linkedin } from 'lucide-react';
 
 const ADMIN_EMAIL = 'adminssb@naverassb.com';
 
@@ -56,6 +56,17 @@ export default function Home({ setMode, handleLogout, user }) {
                     </button>
                 </nav>
             </aside>
+
+            {/* ────── SOCIAL STRIP (right) ────── */}
+            <div className="social-strip">
+                <a href="https://www.instagram.com/scalerschool_of_business/" target="_blank" rel="noopener noreferrer" className="social-link" aria-label="Instagram">
+                    <Instagram size={20} />
+                </a>
+                <div className="social-divider" />
+                <a href="https://www.linkedin.com/school/scaler-school-of-business/" target="_blank" rel="noopener noreferrer" className="social-link" aria-label="LinkedIn">
+                    <Linkedin size={20} />
+                </a>
+            </div>
 
             {/* ────── HERO ────── */}
             <main className="home-main">
