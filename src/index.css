@@ -32,6 +32,7 @@ body {
   height: 100vh;
 }
 
+
 /* ── Home Layout ── */
 .home-wrapper {
   display: flex;
@@ -50,6 +51,22 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   z-index: 0;
+}
+
+/* Sign glow — green radial over the Scaler School of Business sign (upper-left) */
+.sign-glow {
+  position: fixed;
+  top: 5%;
+  left: 80px;
+  width: 38%;
+  height: 65%;
+  background: radial-gradient(ellipse at 22% 42%,
+    rgba(43, 217, 127, 0.55) 0%,
+    rgba(43, 217, 127, 0.18) 35%,
+    transparent 65%
+  );
+  pointer-events: none;
+  z-index: 8;
 }
 
 .home-bg::after {
@@ -164,12 +181,6 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 40px;
-  animation: fadeUp 0.8s ease both;
-}
-
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: translateY(0); }
 }
 
 .hero-logo-wrap {
@@ -179,66 +190,28 @@ body {
   align-items: center;
 }
 
-/* Decorative horizontal lines above logo */
-.deco-lines-top {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 5px;
-  margin-bottom: 12px;
-  width: 320px;
-}
-
-.deco-line {
-  height: 2px;
-  background: var(--accent-light);
-  box-shadow: 0 0 8px var(--accent-glow);
-  border-radius: 2px;
-}
-
-.deco-line-long  { width: 100%; }
-.deco-line-short { width: 55%; }
-
-/* Decorative horizontal lines below logo */
-.deco-lines-bottom {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 5px;
-  margin-top: 12px;
-  width: 320px;
-}
-
-/* Star sparkle */
-.sparkle {
-  position: absolute;
-  top: -8px;
-  right: -20px;
-  color: var(--accent-light);
-  font-size: 22px;
-  filter: drop-shadow(0 0 8px var(--accent-glow));
-  animation: sparkle 3s ease-in-out infinite;
-}
-
-@keyframes sparkle {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.5; transform: scale(0.8); }
-}
-
 .hero-logo {
   width: clamp(320px, 40vw, 500px);
   object-fit: contain;
-  filter: drop-shadow(0 0 30px rgba(210, 43, 61, 0.5));
+  filter: drop-shadow(0 0 40px rgba(210, 43, 61, 0.38));
+}
+
+/* Thin rule between logo and tagline */
+.hero-divider {
+  width: clamp(160px, 20vw, 260px);
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(43,217,127,0.45), transparent);
+  margin: 14px auto 14px;
+  transform-origin: center;
 }
 
 .hero-tagline {
   font-family: 'Montserrat', sans-serif;
-  font-size: clamp(13px, 1.5vw, 18px);
-  font-weight: 700;
-  letter-spacing: 6px;
-  color: var(--text-secondary);
+  font-size: clamp(11px, 1.3vw, 15px);
+  font-weight: 600;
+  letter-spacing: 8px;
+  color: rgba(200, 230, 214, 0.75);
   text-align: center;
-  margin-top: -8px;
 }
 
 /* ── CTA Buttons ── */
