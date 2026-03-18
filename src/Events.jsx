@@ -1,0 +1,320 @@
+import { useState, useEffect } from 'react';
+import { supabase } from './supabase.js';
+import { Home as HomeIcon, Calendar, Star, Trophy, LogOut, MapPin, Users, Mail, Phone, ArrowLeft, ShieldCheck } from 'lucide-react';
+import RegisterModal from './RegisterModal.jsx';
+
+const ADMIN_EMAIL = 'adminssb@naverassb.com';
+
+const events = [
+    {
+        id: 1,
+        name: 'Hackathon',
+        category: 'Tech',
+        date: 'March 25, 2026',
+        description: 'Build innovative solutions in 24 hours. Solo or team up to 4. Push boundaries with AI, IoT, or any tech stack of your choice.',
+        tag: 'FLAGSHIP',
+        banner: null,
+        location: 'Main Auditorium, Block A',
+        teamSize: '1 – 4 members',
+        eligibility: [
+            'Open to all enrolled undergraduate and postgraduate students',
+            'Maximum 4 members per team',
+            'At least one member must be from a CS / IT / EC branch',
+            'Each participant can register in only one team',
+        ],
+        rounds: [
+            { label: 'Round 1', title: 'Idea Submission', detail: 'Submit a 2-page proposal outlining your problem statement and solution by March 20.' },
+            { label: 'Round 2', title: 'Prototype Demo', detail: 'Shortlisted teams present a working prototype to a panel of judges.' },
+            { label: 'Round 3', title: 'Grand Finale', detail: 'Top 10 teams pitch on the main stage for prizes and recognition.' },
+        ],
+        host: { name: 'Raza Khan', email: 'hackathon@navera.tech', phone: '+91 98765 43210' },
+    },
+    {
+        id: 2,
+        name: 'Robo Wars',
+        category: 'Robotics',
+        date: 'March 25, 2026',
+        description: 'Build and battle robots in an arena combat challenge. Design, fabricate, and fight your way to the top.',
+        tag: 'POPULAR',
+        banner: null,
+        location: 'Sports Ground, Block C',
+        teamSize: '2 – 4 members',
+        eligibility: [
+            'Open to all students with a valid college ID',
+            'Teams of 2 to 4 members',
+            'Robots must weigh under 15 kg',
+            'No pre-built commercial robots allowed',
+        ],
+        rounds: [
+            { label: 'Round 1', title: 'Technical Inspection', detail: 'Robots are checked for compliance with weight and safety rules.' },
+            { label: 'Round 2', title: 'League Battles', detail: 'Round-robin matches determine which bots advance.' },
+            { label: 'Round 3', title: 'Elimination Finals', detail: 'Top 4 robots face off in knockout rounds.' },
+        ],
+        host: { name: 'Sara Ali', email: 'robowars@navera.tech', phone: '+91 91234 56789' },
+    },
+    {
+        id: 3,
+        name: 'Code Sprint',
+        category: 'Competitive Programming',
+        date: 'March 26, 2026',
+        description: 'Solve algorithmic problems under time pressure. Compete individually against the best coders from across colleges.',
+        tag: null,
+        banner: null,
+        location: 'Computer Lab 1 & 2, Block B',
+        teamSize: 'Solo only',
+        eligibility: [
+            'Individual participation only — no teams',
+            'Open to all students regardless of branch',
+            'Basic knowledge of any programming language required',
+            'Own laptop allowed; lab systems will also be available',
+        ],
+        rounds: [
+            { label: 'Round 1', title: 'Online Qualifier', detail: '10 problems, 90 minutes. Top 50 advance to the on-site round.' },
+            { label: 'Round 2', title: 'On-site Finals', detail: '5 harder problems, 2 hours. Ranking by score then time.' },
+        ],
+        host: { name: 'Hamza Siddiq', email: 'codesprint@navera.tech', phone: '+91 99887 76655' },
+    },
+    {
+        id: 4,
+        name: 'UI/UX Design Challenge',
+        category: 'Design',
+        date: 'March 26, 2026',
+        description: 'Design stunning user experiences for real-world problems. Present your Figma prototype to a panel of design experts.',
+        tag: null,
+        banner: null,
+        location: 'Design Studio, Block D',
+        teamSize: '1 – 2 members',
+        eligibility: [
+            'Open to all enrolled students',
+            'Solo or pairs (max 2 members)',
+            'Designs must be original — no templates',
+            'Figma or Adobe XD must be used for prototyping',
+        ],
+        rounds: [
+            { label: 'Round 1', title: 'Problem Statement', detail: 'Teams receive a real-world brief and have 3 hours to design.' },
+            { label: 'Round 2', title: 'Presentation', detail: 'Each team presents their prototype and design rationale to judges.' },
+        ],
+        host: { name: 'Fatima Noor', email: 'design@navera.tech', phone: '+91 97654 32109' },
+    },
+    {
+        id: 5,
+        name: 'Project Expo',
+        category: 'Exhibition',
+        date: 'March 27, 2026',
+        description: 'Showcase your project to judges and industry professionals. Win exciting prizes and get your work noticed.',
+        tag: null,
+        banner: null,
+        location: 'Exhibition Hall, Block E',
+        teamSize: '1 – 5 members',
+        eligibility: [
+            'Open to all students and recent graduates (2024–2026 batch)',
+            'Projects must be original student work',
+            'Hardware and software projects both welcome',
+            'Each team gets a 6×4 ft display stall',
+        ],
+        rounds: [
+            { label: 'Phase 1', title: 'Registration & Abstract', detail: 'Submit a 1-page abstract of your project by March 15.' },
+            { label: 'Phase 2', title: 'Expo Day', detail: 'Set up your stall and present to judges and visitors throughout the day.' },
+            { label: 'Phase 3', title: 'Awards Ceremony', detail: 'Top 3 projects receive trophies, cash prizes, and certificates.' },
+        ],
+        host: { name: 'Omar Sheikh', email: 'expo@navera.tech', phone: '+91 96543 21098' },
+    },
+    {
+        id: 6,
+        name: 'CTF',
+        category: 'Cybersecurity',
+        date: 'March 27, 2026',
+        description: 'Capture the flag — test your hacking, reverse engineering, and security skills in a controlled legal environment.',
+        tag: null,
+        banner: null,
+        location: 'Cyber Lab, Block B',
+        teamSize: '1 – 3 members',
+        eligibility: [
+            'Open to all students with interest in cybersecurity',
+            'Teams of 1 to 3 members',
+            'No prior CTF experience required — beginner-friendly tracks available',
+            'Ethical hacking rules strictly enforced',
+        ],
+        rounds: [
+            { label: 'Round 1', title: 'Jeopardy Style CTF', detail: '8-hour online CTF with categories: Web, Crypto, Forensics, Reverse Engineering, Misc.' },
+            { label: 'Round 2', title: 'Attack-Defense Finals', detail: 'Top 5 teams defend their own servers while attacking others in real time.' },
+        ],
+        host: { name: 'Zainab Mirza', email: 'ctf@navera.tech', phone: '+91 95432 10987' },
+    },
+];
+
+function Sidebar({ setMode, handleLogout, user, activeMode = 'events' }) {
+    return (
+        <aside className="sidebar">
+            <img src="/images/navera-logo-transparent.png" alt="Navera" className="sidebar-logo" />
+            <nav className="sidebar-nav">
+                <button className="nav-item" onClick={() => setMode('home')}><HomeIcon size={22} />HOME</button>
+                <button className={`nav-item ${activeMode === 'events' ? 'active' : ''}`} onClick={() => setMode('events')}><Calendar size={22} />EVENTS</button>
+                <button className="nav-item" onClick={() => setMode('sponsors')}><Star size={22} />SPONSORS</button>
+                <button className="nav-item" onClick={() => setMode('results')}><Trophy size={22} />RESULTS</button>
+                {user?.email === ADMIN_EMAIL && (
+                    <button className="nav-item" onClick={() => setMode('admin')}><ShieldCheck size={22} />ADMIN</button>
+                )}
+                <span className="sidebar-spacer" />
+                <button className="nav-item logout" onClick={user ? handleLogout : () => setMode('login')}>
+                    <LogOut size={22} />{user ? 'LOGOUT' : 'LOGIN'}
+                </button>
+            </nav>
+        </aside>
+    );
+}
+
+function EventDetailView({ event, onBack, setMode, handleLogout, user }) {
+    const [showReg, setShowReg] = useState(false);
+
+    const handleRegisterClick = () => {
+        if (!user) { setMode('login'); return; }
+        setShowReg(true);
+    };
+
+    return (
+        <div className="home-wrapper">
+            <div className="home-bg" />
+            <Sidebar setMode={setMode} handleLogout={handleLogout} user={user} />
+
+            {showReg && (
+                <RegisterModal event={event} user={user} onClose={() => setShowReg(false)} />
+            )}
+
+            <main className="page-main">
+                <button className="detail-back-btn" onClick={onBack}>
+                    <ArrowLeft size={15} /> Back to Events
+                </button>
+
+                {/* Banner */}
+                <div className="detail-banner">
+                    {event.banner && <img src={event.banner} alt={event.name} />}
+                    <div className="detail-banner-overlay">
+                        <span className="detail-banner-category">{event.category}</span>
+                        <h1 className="detail-banner-title">{event.name}</h1>
+                        {event.tag && <span className="event-tag" style={{ marginTop: 10 }}>{event.tag}</span>}
+                    </div>
+                </div>
+
+                {/* Meta strip */}
+                <div className="detail-meta-strip">
+                    <span className="detail-meta-item"><Calendar size={14} /> {event.date}</span>
+                    <span className="detail-meta-item"><MapPin size={14} /> {event.location}</span>
+                    <span className="detail-meta-item"><Users size={14} /> {event.teamSize}</span>
+                </div>
+
+                {/* Two-column body */}
+                <div className="detail-body">
+                    <div className="detail-col-main">
+                        <section className="detail-section">
+                            <h2 className="detail-section-title">About</h2>
+                            <p className="detail-section-text">{event.description}</p>
+                        </section>
+
+                        <section className="detail-section">
+                            <h2 className="detail-section-title">Eligibility & Criteria</h2>
+                            <ul className="detail-criteria-list">
+                                {event.eligibility.map((item, i) => <li key={i}>{item}</li>)}
+                            </ul>
+                        </section>
+
+                        <section className="detail-section">
+                            <h2 className="detail-section-title">Rounds</h2>
+                            <div className="detail-rounds">
+                                {event.rounds.map((r, i) => (
+                                    <div className="detail-round-item" key={i}>
+                                        <div className="detail-round-badge">{r.label}</div>
+                                        <div>
+                                            <p className="detail-round-title">{r.title}</p>
+                                            <p className="detail-round-detail">{r.detail}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                    </div>
+
+                    <aside className="detail-col-side">
+                        <div className="detail-cta-card">
+                            <button className="btn btn-primary detail-register-btn" onClick={handleRegisterClick}>
+                                {user ? 'Register Now' : 'Login to Register'}
+                            </button>
+                            <p className="detail-cta-note">Free entry · Limited seats</p>
+                        </div>
+
+                        <div className="detail-contact-card">
+                            <h3 className="detail-contact-title">Host Contact</h3>
+                            <p className="detail-contact-name">{event.host.name}</p>
+                            <a className="detail-contact-link" href={`mailto:${event.host.email}`}>
+                                <Mail size={14} /> {event.host.email}
+                            </a>
+                            <a className="detail-contact-link" href={`tel:${event.host.phone}`}>
+                                <Phone size={14} /> {event.host.phone}
+                            </a>
+                        </div>
+                    </aside>
+                </div>
+            </main>
+        </div>
+    );
+}
+
+export default function Events({ setMode, handleLogout, user }) {
+    const [selectedEvent, setSelectedEvent] = useState(null);
+    const [events, setEvents] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        supabase.from('events').select('*').order('created_at').then(({ data }) => {
+            setEvents((data || []).map(ev => ({
+                ...ev,
+                teamSize: ev.team_size,
+                host: { name: ev.host_name, email: ev.host_email, phone: ev.host_phone },
+            })));
+            setLoading(false);
+        });
+    }, []);
+
+    if (selectedEvent) {
+        return (
+            <EventDetailView
+                event={selectedEvent}
+                onBack={() => setSelectedEvent(null)}
+                setMode={setMode}
+                handleLogout={handleLogout}
+                user={user}
+            />
+        );
+    }
+
+    return (
+        <div className="home-wrapper">
+            <div className="home-bg" />
+            <Sidebar setMode={setMode} handleLogout={handleLogout} user={user} />
+
+            <main className="page-main">
+                <div className="page-header">
+                    <h1 className="page-title">EVENTS</h1>
+                    <p className="page-subtitle">Compete. Create. Conquer.</p>
+                </div>
+                {loading && <p style={{ color: 'var(--text-secondary)' }}>Loading...</p>}
+                {!loading && events.length === 0 && <p style={{ color: 'var(--text-secondary)', textAlign: 'center', marginTop: 60 }}>No events added yet.</p>}
+                <div className="events-grid">
+                    {events.map(ev => (
+                        <div className="event-card" key={ev.id} onClick={() => setSelectedEvent(ev)}>
+                            {ev.tag && <span className="event-tag">{ev.tag}</span>}
+                            <p className="event-category">{ev.category}</p>
+                            <h2 className="event-name">{ev.name}</h2>
+                            <p className="event-desc">{ev.description}</p>
+                            <div className="event-footer">
+                                <span className="event-date"><Calendar size={14} /> {ev.date}</span>
+                                {ev.teamSize && <span className="event-date"><Users size={14} /> {ev.teamSize}</span>}
+                            </div>
+                            <p className="event-card-cta">View Details →</p>
+                        </div>
+                    ))}
+                </div>
+            </main>
+        </div>
+    );
+}
