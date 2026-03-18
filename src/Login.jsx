@@ -185,10 +185,10 @@ export default function Login({ setMode, setUser }) {
                                     <label>Enter OTP</label>
                                     <input
                                         type="text"
-                                        placeholder="6-digit code"
+                                        placeholder="Enter OTP code"
                                         value={otp}
                                         onChange={e => setOtp(e.target.value)}
-                                        maxLength={6}
+                                        maxLength={8}
                                         required
                                         className="otp-input"
                                     />
