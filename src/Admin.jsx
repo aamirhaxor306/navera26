@@ -3,6 +3,7 @@ import { supabase } from './supabase.js';
 import { Home as HomeIcon, Calendar, Star, Trophy, LogOut, Users, Plus, Trash2, Edit2, X, Check, ShieldCheck, ClipboardList } from 'lucide-react';
 
 const ADMIN_EMAIL = 'adminssb@naverassb.com';
+const isAdminEmail = (email) => (email || '').trim().toLowerCase() === ADMIN_EMAIL;
 
 function Sidebar({ setMode, handleLogout, user, active }) {
     return (
@@ -13,7 +14,7 @@ function Sidebar({ setMode, handleLogout, user, active }) {
                 <button className="nav-item" onClick={() => setMode('events')}><Calendar size={22} />EVENTS</button>
                 <button className="nav-item" onClick={() => setMode('sponsors')}><Star size={22} />SPONSORS</button>
                 <button className="nav-item" onClick={() => setMode('results')}><Trophy size={22} />RESULTS</button>
-                {user?.email === ADMIN_EMAIL && (
+                {isAdminEmail(user?.email) && (
                     <button className={`nav-item ${active === 'admin' ? 'active' : ''}`} onClick={() => setMode('admin')}>
                         <ShieldCheck size={22} />ADMIN
                     </button>

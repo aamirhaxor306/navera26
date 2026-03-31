@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { supabase } from './supabase.js';
 import { ChevronRight, ChevronLeft, GraduationCap, BookOpen, Mail } from 'lucide-react';
 
+const ADMIN_EMAIL = 'adminssb@naverassb.com';
+
 export default function Login({ setMode, setUser }) {
     const [step, setStep] = useState('degree');
-    const [isSignUp, setIsSignUp] = useState(true);
+    const [isSignUp, setIsSignUp] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
@@ -32,13 +34,17 @@ export default function Login({ setMode, setUser }) {
         setError('');
         setLoading(true);
 
-        if (isSignUp) {
-            const { data, error: err } = await supabase.auth.signUp({ email, password });
+        const normalizedEmail = email.trim().toLowerCase();
+        const shouldForceSignIn = normalizedEmail === ADMIN_EMAIL;
+        const doSignUp = isSignUp && !shouldForceSignIn;
+
+        if (doSignUp) {
+            const { data, error: err } = await supabase.auth.signUp({ email: normalizedEmail, password });
             if (err) { setError(err.message); setLoading(false); return; }
             setSignedUpUser(data.user);
             setStep('otp');
         } else {
-            const { data, error: err } = await supabase.auth.signInWithPassword({ email, password });
+            const { data, error: err } = await supabase.auth.signInWithPassword({ email: normalizedEmail, password });
             if (err) { setError(err.message); setLoading(false); return; }
             setUser(data.user);
             setMode('home');

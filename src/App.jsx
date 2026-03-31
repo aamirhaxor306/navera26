@@ -12,6 +12,7 @@ const ADMIN_EMAIL = 'adminssb@naverassb.com';
 export default function App() {
     const [mode, setMode] = useState('home');
     const [user, setUser] = useState(null);
+    const isAdminEmail = (email) => (email || '').trim().toLowerCase() === ADMIN_EMAIL;
 
     useEffect(() => {
         supabase.auth.getSession().then(({ data: { session } }) => {
@@ -29,14 +30,14 @@ export default function App() {
         setMode('home');
     };
 
-    const props = { setMode, handleLogout, user, isAdmin: user?.email === ADMIN_EMAIL };
+    const props = { setMode, handleLogout, user, isAdmin: isAdminEmail(user?.email) };
 
     switch (mode) {
         case 'login':    return <Login    setMode={setMode} setUser={setUser} />;
         case 'events':   return <Events   {...props} />;
         case 'sponsors': return <Sponsors {...props} />;
         case 'results':  return <Results  {...props} />;
-        case 'admin':    return user?.email === ADMIN_EMAIL ? <Admin {...props} /> : <Home {...props} />;
+        case 'admin':    return isAdminEmail(user?.email) ? <Admin {...props} /> : <Home {...props} />;
         default:         return <Home     {...props} />;
     }
 }
