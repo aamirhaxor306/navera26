@@ -215,6 +215,55 @@ body {
   padding-bottom: 80px;
 }
 
+/* ── Home: Partners (footer badges) ── */
+.partners-row {
+  position: fixed;
+  z-index: 15;
+  bottom: 34px;
+  /* Center in the main column (to the right of the sidebar) */
+  left: calc(var(--sidebar-width) + (100vw - var(--sidebar-width)) / 2);
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+  pointer-events: none;
+}
+
+.partner-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 22px 18px;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(43, 217, 127, 0.28);
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+}
+
+.partner-badge-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(232, 248, 240, 0.92);
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.55);
+}
+
+.partner-badge-logo {
+  display: block;
+  width: clamp(75px, 11.5vw, 120px);
+  height: auto;
+  max-width: min(120px, calc((100vw - var(--sidebar-width) - 56px) / 4));
+  object-fit: contain;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.45));
+}
+
 /* ── Hero ── */
 .hero-content {
   display: flex;
@@ -1558,6 +1607,32 @@ body {
     padding-bottom: 80px;
     padding-top: 20px;
     min-height: 100vh;
+  }
+
+  /* Partners — above fixed bottom nav (60px) */
+  .partners-row {
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 92px;
+    width: calc(100vw - 24px);
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .partner-badge {
+    padding: 12px 16px 14px;
+    flex: 1;
+    max-width: 220px;
+  }
+
+  .partner-badge-label {
+    font-size: 10px;
+    letter-spacing: 2.5px;
+  }
+
+  .partner-badge-logo {
+    width: min(90px, 22.5vw);
+    max-width: 100%;
   }
 
   .hero-logo {

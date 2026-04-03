@@ -49,8 +49,9 @@ function EventsTab() {
     const [loading, setLoading] = useState(true);
     const [showForm, setShowForm] = useState(false);
     const [editing, setEditing] = useState(null);
-    const blank = { name: '', category: '', date: '', description: '', tag: '', location: '', team_size: '', eligibility: '', rounds: '', host_name: '', host_email: '', host_phone: '' };
+    const blank = { name: '', category: '', date: '', description: '', tag: '', location: '', team_size: '', prize_pool: '', unstop_link: '', eligibility: '', host_name: '', host_email: '', host_phone: '' };
     const [form, setForm] = useState(blank);
+    const [formError, setFormError] = useState('');
 
     const load = async () => {
         setLoading(true);
@@ -63,28 +64,28 @@ function EventsTab() {
 
     const openAdd = () => { setForm(blank); setEditing(null); setShowForm(true); };
     const openEdit = (ev) => {
+        setFormError('');
         setForm({
             ...ev,
             eligibility: Array.isArray(ev.eligibility) ? ev.eligibility.join('\n') : '',
-            rounds: ev.rounds ? ev.rounds.map(r => `${r.label}|${r.title}|${r.detail}`).join('\n') : '',
         });
         setEditing(ev.id);
         setShowForm(true);
     };
 
     const save = async () => {
+        setFormError('');
+        const { rounds: _rounds, ...rest } = form;
         const payload = {
-            ...form,
+            ...rest,
             eligibility: form.eligibility.split('\n').map(s => s.trim()).filter(Boolean),
-            rounds: form.rounds.split('\n').filter(Boolean).map(line => {
-                const [label, title, ...rest] = line.split('|');
-                return { label: label?.trim(), title: title?.trim(), detail: rest.join('|').trim() };
-            }),
         };
         if (editing) {
-            await supabase.from('events').update(payload).eq('id', editing);
+            const { error } = await supabase.from('events').update(payload).eq('id', editing);
+            if (error) { setFormError(error.message); return; }
         } else {
-            await supabase.from('events').insert(payload);
+            const { error } = await supabase.from('events').insert(payload);
+            if (error) { setFormError(error.message); return; }
         }
         setShowForm(false);
         load();
@@ -143,20 +144,25 @@ function EventsTab() {
                             <div className="admin-form-group"><label>Location</label><input value={form.location} onChange={e => setForm({ ...form, location: e.target.value })} /></div>
                             <div className="admin-form-group"><label>Team Size</label><input value={form.team_size} onChange={e => setForm({ ...form, team_size: e.target.value })} placeholder="1 – 4 members" /></div>
                         </div>
+                        <div className="admin-form-group">
+                            <label>Prize Pool (optional)</label>
+                            <input value={form.prize_pool} onChange={e => setForm({ ...form, prize_pool: e.target.value })} placeholder="₹50,000" />
+                        </div>
+                        <div className="admin-form-group">
+                            <label>Unstop link (optional)</label>
+                            <input value={form.unstop_link} onChange={e => setForm({ ...form, unstop_link: e.target.value })} type="url" placeholder="https://unstop.com/..." />
+                        </div>
                         <div className="admin-form-group"><label>Description</label><textarea rows={3} value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} /></div>
                         <div className="admin-form-group">
                             <label>Eligibility (one per line)</label>
                             <textarea rows={4} value={form.eligibility} onChange={e => setForm({ ...form, eligibility: e.target.value })} placeholder="Open to all students&#10;Max 4 members per team" />
-                        </div>
-                        <div className="admin-form-group">
-                            <label>Rounds (format: Label|Title|Detail, one per line)</label>
-                            <textarea rows={4} value={form.rounds} onChange={e => setForm({ ...form, rounds: e.target.value })} placeholder="Round 1|Idea Submission|Submit a 2-page proposal&#10;Round 2|Finals|Top teams pitch on stage" />
                         </div>
                         <div className="admin-form-row">
                             <div className="admin-form-group"><label>Host Name</label><input value={form.host_name} onChange={e => setForm({ ...form, host_name: e.target.value })} /></div>
                             <div className="admin-form-group"><label>Host Email</label><input value={form.host_email} onChange={e => setForm({ ...form, host_email: e.target.value })} /></div>
                         </div>
                         <div className="admin-form-group"><label>Host Phone</label><input value={form.host_phone} onChange={e => setForm({ ...form, host_phone: e.target.value })} /></div>
+                        {formError && <p className="login-error" style={{ marginTop: 4 }}>{formError}</p>}
                         <div className="admin-form-actions">
                             <button className="admin-cancel-btn" onClick={() => setShowForm(false)}>Cancel</button>
                             <button className="admin-save-btn" onClick={save}><Check size={15} /> Save</button>

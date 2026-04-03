@@ -59,11 +59,11 @@ export default function Home({ setMode, handleLogout, user }) {
 
             {/* ────── SOCIAL STRIP (right) ────── */}
             <div className="social-strip">
-                <a href="https://www.instagram.com/scalerschool_of_business/" target="_blank" rel="noopener noreferrer" className="social-link" aria-label="Instagram">
+                <a href="https://www.instagram.com/navera_ssb?igsh=djdyd2JvdTFxdWIx" target="_blank" rel="noopener noreferrer" className="social-link" aria-label="Instagram">
                     <Instagram size={20} />
                 </a>
                 <div className="social-divider" />
-                <a href="https://www.linkedin.com/school/scaler-school-of-business/" target="_blank" rel="noopener noreferrer" className="social-link" aria-label="LinkedIn">
+                <a href="https://www.linkedin.com/in/navera-ssb-0459103b6?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" rel="noopener noreferrer" className="social-link" aria-label="LinkedIn">
                     <Linkedin size={20} />
                 </a>
             </div>
@@ -112,6 +112,27 @@ export default function Home({ setMode, handleLogout, user }) {
                     </motion.div>
                 </div>
             </main>
+
+            {/* Partners — static badges, bottom of Home */}
+            <div className="partners-row" role="region" aria-label="Partners">
+                <div className="partner-badge" aria-label="Ticketing partner">
+                    <span className="partner-badge-label">Ticketing partner</span>
+                    <img
+                        src="/images/district.png"
+                        alt="Get tickets on District by Zomato"
+                        className="partner-badge-logo"
+                    />
+                </div>
+
+                <div className="partner-badge" aria-label="Registration partner">
+                    <span className="partner-badge-label">Registration partner</span>
+                    <img
+                        src="/images/Unstop-Logo-Blue-Small.png"
+                        alt="Unstop"
+                        className="partner-badge-logo"
+                    />
+                </div>
+            </div>
         </div>
     );
 }

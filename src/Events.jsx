@@ -1,9 +1,16 @@
 import { useState, useEffect } from 'react';
 import { supabase } from './supabase.js';
-import { Home as HomeIcon, Calendar, Star, Trophy, LogOut, MapPin, Users, Mail, Phone, ArrowLeft, ShieldCheck } from 'lucide-react';
+import { Home as HomeIcon, Calendar, Star, Trophy, LogOut, MapPin, Users, Mail, Phone, ArrowLeft, ShieldCheck, ExternalLink } from 'lucide-react';
 import RegisterModal from './RegisterModal.jsx';
 
 const ADMIN_EMAIL = 'adminssb@naverassb.com';
+
+function normalizeExternalHref(url) {
+    const u = (url || '').trim();
+    if (!u) return '';
+    if (/^https?:\/\//i.test(u)) return u;
+    return `https://${u}`;
+}
 
 const events = [
     {
@@ -21,11 +28,6 @@ const events = [
             'Maximum 4 members per team',
             'At least one member must be from a CS / IT / EC branch',
             'Each participant can register in only one team',
-        ],
-        rounds: [
-            { label: 'Round 1', title: 'Idea Submission', detail: 'Submit a 2-page proposal outlining your problem statement and solution by March 20.' },
-            { label: 'Round 2', title: 'Prototype Demo', detail: 'Shortlisted teams present a working prototype to a panel of judges.' },
-            { label: 'Round 3', title: 'Grand Finale', detail: 'Top 10 teams pitch on the main stage for prizes and recognition.' },
         ],
         host: { name: 'Raza Khan', email: 'hackathon@navera.tech', phone: '+91 98765 43210' },
     },
@@ -45,11 +47,6 @@ const events = [
             'Robots must weigh under 15 kg',
             'No pre-built commercial robots allowed',
         ],
-        rounds: [
-            { label: 'Round 1', title: 'Technical Inspection', detail: 'Robots are checked for compliance with weight and safety rules.' },
-            { label: 'Round 2', title: 'League Battles', detail: 'Round-robin matches determine which bots advance.' },
-            { label: 'Round 3', title: 'Elimination Finals', detail: 'Top 4 robots face off in knockout rounds.' },
-        ],
         host: { name: 'Sara Ali', email: 'robowars@navera.tech', phone: '+91 91234 56789' },
     },
     {
@@ -67,10 +64,6 @@ const events = [
             'Open to all students regardless of branch',
             'Basic knowledge of any programming language required',
             'Own laptop allowed; lab systems will also be available',
-        ],
-        rounds: [
-            { label: 'Round 1', title: 'Online Qualifier', detail: '10 problems, 90 minutes. Top 50 advance to the on-site round.' },
-            { label: 'Round 2', title: 'On-site Finals', detail: '5 harder problems, 2 hours. Ranking by score then time.' },
         ],
         host: { name: 'Hamza Siddiq', email: 'codesprint@navera.tech', phone: '+91 99887 76655' },
     },
@@ -90,10 +83,6 @@ const events = [
             'Designs must be original — no templates',
             'Figma or Adobe XD must be used for prototyping',
         ],
-        rounds: [
-            { label: 'Round 1', title: 'Problem Statement', detail: 'Teams receive a real-world brief and have 3 hours to design.' },
-            { label: 'Round 2', title: 'Presentation', detail: 'Each team presents their prototype and design rationale to judges.' },
-        ],
         host: { name: 'Fatima Noor', email: 'design@navera.tech', phone: '+91 97654 32109' },
     },
     {
@@ -112,11 +101,6 @@ const events = [
             'Hardware and software projects both welcome',
             'Each team gets a 6×4 ft display stall',
         ],
-        rounds: [
-            { label: 'Phase 1', title: 'Registration & Abstract', detail: 'Submit a 1-page abstract of your project by March 15.' },
-            { label: 'Phase 2', title: 'Expo Day', detail: 'Set up your stall and present to judges and visitors throughout the day.' },
-            { label: 'Phase 3', title: 'Awards Ceremony', detail: 'Top 3 projects receive trophies, cash prizes, and certificates.' },
-        ],
         host: { name: 'Omar Sheikh', email: 'expo@navera.tech', phone: '+91 96543 21098' },
     },
     {
@@ -134,10 +118,6 @@ const events = [
             'Teams of 1 to 3 members',
             'No prior CTF experience required — beginner-friendly tracks available',
             'Ethical hacking rules strictly enforced',
-        ],
-        rounds: [
-            { label: 'Round 1', title: 'Jeopardy Style CTF', detail: '8-hour online CTF with categories: Web, Crypto, Forensics, Reverse Engineering, Misc.' },
-            { label: 'Round 2', title: 'Attack-Defense Finals', detail: 'Top 5 teams defend their own servers while attacking others in real time.' },
         ],
         host: { name: 'Zainab Mirza', email: 'ctf@navera.tech', phone: '+91 95432 10987' },
     },
@@ -201,6 +181,7 @@ function EventDetailView({ event, onBack, setMode, handleLogout, user }) {
                     <span className="detail-meta-item"><Calendar size={14} /> {event.date}</span>
                     <span className="detail-meta-item"><MapPin size={14} /> {event.location}</span>
                     <span className="detail-meta-item"><Users size={14} /> {event.teamSize}</span>
+                    {event.prize_pool && <span className="detail-meta-item"><Trophy size={14} /> {event.prize_pool}</span>}
                 </div>
 
                 {/* Two-column body */}
@@ -212,25 +193,10 @@ function EventDetailView({ event, onBack, setMode, handleLogout, user }) {
                         </section>
 
                         <section className="detail-section">
-                            <h2 className="detail-section-title">Eligibility & Criteria</h2>
+                            <h2 className="detail-section-title">Eligibility Criteria</h2>
                             <ul className="detail-criteria-list">
-                                {event.eligibility.map((item, i) => <li key={i}>{item}</li>)}
+                                {(Array.isArray(event.eligibility) ? event.eligibility : []).map((item, i) => <li key={i}>{item}</li>)}
                             </ul>
-                        </section>
-
-                        <section className="detail-section">
-                            <h2 className="detail-section-title">Rounds</h2>
-                            <div className="detail-rounds">
-                                {event.rounds.map((r, i) => (
-                                    <div className="detail-round-item" key={i}>
-                                        <div className="detail-round-badge">{r.label}</div>
-                                        <div>
-                                            <p className="detail-round-title">{r.title}</p>
-                                            <p className="detail-round-detail">{r.detail}</p>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
                         </section>
                     </div>
 
@@ -239,6 +205,16 @@ function EventDetailView({ event, onBack, setMode, handleLogout, user }) {
                             <button className="btn btn-primary detail-register-btn" onClick={handleRegisterClick}>
                                 {user ? 'Register Now' : 'Login to Register'}
                             </button>
+                            {(event.unstop_link || '').trim() && (
+                                <a
+                                    className="btn btn-outline detail-register-btn"
+                                    href={normalizeExternalHref(event.unstop_link)}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <ExternalLink size={16} /> Register on Unstop
+                                </a>
+                            )}
                             <p className="detail-cta-note">Free entry · Limited seats</p>
                         </div>
 
@@ -295,7 +271,7 @@ export default function Events({ setMode, handleLogout, user }) {
             <main className="page-main">
                 <div className="page-header">
                     <h1 className="page-title">EVENTS</h1>
-                    <p className="page-subtitle">Compete. Create. Conquer.</p>
+                    <p className="page-subtitle">Builder&apos;s Boardroom</p>
                 </div>
                 {loading && <p style={{ color: 'var(--text-secondary)' }}>Loading...</p>}
                 {!loading && events.length === 0 && <p style={{ color: 'var(--text-secondary)', textAlign: 'center', marginTop: 60 }}>No events added yet.</p>}
