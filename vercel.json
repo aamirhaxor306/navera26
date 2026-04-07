@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/school-of-business/navera",
+      "destination": "/school-of-business/navera26"
+    }
+  ]
+}
