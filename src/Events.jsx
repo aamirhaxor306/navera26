@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from './supabase.js';
 import { Home as HomeIcon, Calendar, Star, Trophy, LogOut, MapPin, Users, Mail, Phone, ArrowLeft, ShieldCheck, ExternalLink } from 'lucide-react';
-import RegisterModal from './RegisterModal.jsx';
 
 const ADMIN_EMAIL = 'adminssb@naverassb.com';
 
@@ -145,21 +144,12 @@ function Sidebar({ setMode, handleLogout, user, activeMode = 'events' }) {
 }
 
 function EventDetailView({ event, onBack, setMode, handleLogout, user }) {
-    const [showReg, setShowReg] = useState(false);
-
-    const handleRegisterClick = () => {
-        if (!user) { setMode('login'); return; }
-        setShowReg(true);
-    };
+    const unstopHref = (event.unstop_link || '').trim();
 
     return (
         <div className="home-wrapper">
             <div className="home-bg" />
             <Sidebar setMode={setMode} handleLogout={handleLogout} user={user} />
-
-            {showReg && (
-                <RegisterModal event={event} user={user} onClose={() => setShowReg(false)} />
-            )}
 
             <main className="page-main">
                 <button className="detail-back-btn" onClick={onBack}>
@@ -202,17 +192,14 @@ function EventDetailView({ event, onBack, setMode, handleLogout, user }) {
 
                     <aside className="detail-col-side">
                         <div className="detail-cta-card">
-                            <button className="btn btn-primary detail-register-btn" onClick={handleRegisterClick}>
-                                {user ? 'Register Now' : 'Login to Register'}
-                            </button>
-                            {(event.unstop_link || '').trim() && (
+                            {unstopHref && (
                                 <a
-                                    className="btn btn-outline detail-register-btn"
-                                    href={normalizeExternalHref(event.unstop_link)}
+                                    className="btn btn-primary detail-register-btn"
+                                    href={normalizeExternalHref(unstopHref)}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
-                                    <ExternalLink size={16} /> Register on Unstop
+                                    Register now on Unstop <ExternalLink size={16} />
                                 </a>
                             )}
                             <p className="detail-cta-note">Free entry · Limited seats</p>
