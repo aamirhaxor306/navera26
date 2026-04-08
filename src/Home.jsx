@@ -117,7 +117,7 @@ export default function Home({ setMode, handleLogout, user }) {
                     <img
                         src="/images/district.png"
                         alt="Get tickets on District by Zomato"
-                        className="partner-badge-logo partner-badge-logo--district"
+                        className="partner-badge-logo"
                     />
                 </div>
 
