@@ -106,9 +106,6 @@ export default function Home({ setMode, handleLogout, user }) {
                         <button className="btn btn-primary" onClick={() => setMode('events')}>
                             Explore Events <ChevronRight size={18} />
                         </button>
-                        <button className="btn btn-outline" onClick={() => setMode('login')}>
-                            Register Now
-                        </button>
                     </motion.div>
                 </div>
             </main>
@@ -120,7 +117,7 @@ export default function Home({ setMode, handleLogout, user }) {
                     <img
                         src="/images/district.png"
                         alt="Get tickets on District by Zomato"
-                        className="partner-badge-logo"
+                        className="partner-badge-logo partner-badge-logo--district"
                     />
                 </div>
 

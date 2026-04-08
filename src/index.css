@@ -244,6 +244,9 @@ body {
   border: 1px solid rgba(43, 217, 127, 0.28);
   border-radius: 16px;
   backdrop-filter: blur(12px);
+  width: 260px;
+  min-height: 132px;
+  justify-content: center;
   box-shadow:
     0 12px 40px rgba(0, 0, 0, 0.45),
     0 0 0 1px rgba(255, 255, 255, 0.04) inset;
@@ -261,11 +264,17 @@ body {
 
 .partner-badge-logo {
   display: block;
-  width: clamp(75px, 11.5vw, 120px);
-  height: auto;
+  width: auto;
+  height: 44px;
+  max-height: 44px;
   max-width: min(120px, calc((100vw - var(--sidebar-width) - 56px) / 4));
   object-fit: contain;
   filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.45));
+}
+
+.partner-badge-logo--district {
+  height: 64px;
+  max-height: 64px;
 }
 
 /* ── Hero ── */
@@ -1653,6 +1662,7 @@ body {
     flex: 1 1 calc(50% - 6px);
     min-width: 0;
     max-width: calc(50% - 6px);
+    min-height: 120px;
   }
 
   .partner-badge-label {
@@ -1663,8 +1673,15 @@ body {
   }
 
   .partner-badge-logo {
-    width: min(72px, 28vw);
+    width: auto;
+    height: 40px;
+    max-height: 40px;
     max-width: 100%;
+  }
+
+  .partner-badge-logo--district {
+    height: 56px;
+    max-height: 56px;
   }
 
   .hero-content {
