@@ -3,6 +3,10 @@
     {
       "source": "/school-of-business/navera",
       "destination": "/school-of-business/navera26"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
