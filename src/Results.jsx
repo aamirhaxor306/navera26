@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from './supabase.js';
+import { publicUrl } from './publicUrl.js';
 import { Home as HomeIcon, Calendar, Star, Trophy, LogOut, Medal, ShieldCheck } from 'lucide-react';
 
 const ADMIN_EMAIL = 'adminssb@naverassb.com';
@@ -28,7 +29,7 @@ export default function Results({ setMode, handleLogout, user }) {
         <div className="home-wrapper">
             <div className="home-bg" />
             <aside className="sidebar">
-                <img src="/images/navera-logo-transparent.png" alt="Navera" className="sidebar-logo" />
+                <img src={publicUrl('images/navera-logo-transparent.png')} alt="Navera" className="sidebar-logo" />
                 <nav className="sidebar-nav">
                     <button className="nav-item" onClick={() => setMode('home')}><HomeIcon size={22} />HOME</button>
                     <button className="nav-item" onClick={() => setMode('events')}><Calendar size={22} />EVENTS</button>

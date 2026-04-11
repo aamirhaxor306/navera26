@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { supabase } from './supabase.js';
+import { publicUrl } from './publicUrl.js';
 import { ChevronRight, ChevronLeft, GraduationCap, BookOpen, Mail } from 'lucide-react';
 
 const ADMIN_EMAIL = 'adminssb@naverassb.com';
@@ -109,7 +110,7 @@ export default function Login({ setMode, setUser }) {
 
             <div className="login-center">
                 <div className="login-card">
-                    <img src="/images/navera-logo-transparent.png" alt="Navera" className="login-logo" />
+                    <img src={publicUrl('images/navera-logo-transparent.png')} alt="Navera" className="login-logo" />
 
                     {/* ── Step 1: Degree ── */}
                     {step === 'degree' && (

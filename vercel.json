@@ -5,6 +5,22 @@
       "destination": "/school-of-business/navera26"
     },
     {
+      "source": "/school-of-business/navera26/assets/(.*)",
+      "destination": "/assets/$1"
+    },
+    {
+      "source": "/school-of-business/navera26/images/(.*)",
+      "destination": "/images/$1"
+    },
+    {
+      "source": "/school-of-business/navera26",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/school-of-business/navera26/",
+      "destination": "/index.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

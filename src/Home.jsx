@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Home as HomeIcon, Calendar, Star, Trophy, LogOut, ShieldCheck, ChevronRight, Instagram, Linkedin } from 'lucide-react';
+import { publicUrl } from './publicUrl.js';
 
 const ADMIN_EMAIL = 'adminssb@naverassb.com';
 
@@ -31,7 +32,7 @@ export default function Home({ setMode, handleLogout, user }) {
 
             {/* ────── SIDEBAR ────── */}
             <aside className="sidebar">
-                <img src="/images/navera-logo-transparent.png" alt="Navera" className="sidebar-logo" />
+                <img src={publicUrl('images/navera-logo-transparent.png')} alt="Navera" className="sidebar-logo" />
                 <nav className="sidebar-nav">
                     <button className="nav-item active" onClick={() => setMode('home')}>
                         <HomeIcon size={22} />HOME
@@ -75,7 +76,7 @@ export default function Home({ setMode, handleLogout, user }) {
 
                         {/* Logo — fades in after scene is revealed */}
                         <motion.img
-                            src="/images/navera-logo-transparent.png"
+                            src={publicUrl('images/navera-logo-transparent.png')}
                             alt="NAVERA 26"
                             className="hero-logo"
                             initial={{ opacity: 0, y: 20 }}
@@ -115,7 +116,7 @@ export default function Home({ setMode, handleLogout, user }) {
                 <div className="partner-badge" aria-label="Ticketing partner">
                     <span className="partner-badge-label">Ticketing partner</span>
                     <img
-                        src="/images/district.png"
+                        src={publicUrl('images/district.png')}
                         alt="Get tickets on District by Zomato"
                         className="partner-badge-logo"
                     />
@@ -124,7 +125,7 @@ export default function Home({ setMode, handleLogout, user }) {
                 <div className="partner-badge" aria-label="Registration partner">
                     <span className="partner-badge-label">Registration partner</span>
                     <img
-                        src="/images/Unstop-Logo-Blue-Small.png"
+                        src={publicUrl('images/Unstop-Logo-Blue-Small.png')}
                         alt="Unstop"
                         className="partner-badge-logo"
                     />

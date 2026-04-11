@@ -50,7 +50,7 @@ body {
 .home-bg {
   position: absolute;
   inset: 0;
-  background-image: url('/images/cyberpunk-bg.png');
+  background-image: var(--img-cyberpunk-bg);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
