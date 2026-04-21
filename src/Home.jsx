@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Home as HomeIcon, Calendar, Star, Trophy, LogOut, ShieldCheck, ChevronRight, Instagram, Linkedin } from 'lucide-react';
+import { Home as HomeIcon, Calendar, LogOut, ShieldCheck, ChevronRight, Instagram, Linkedin } from 'lucide-react';
 import { publicUrl } from './publicUrl.js';
 
 const ADMIN_EMAIL = 'adminssb@naverassb.com';
@@ -39,12 +39,6 @@ export default function Home({ setMode, handleLogout, user }) {
                     </button>
                     <button className="nav-item" onClick={() => setMode('events')}>
                         <Calendar size={22} />EVENTS
-                    </button>
-                    <button className="nav-item" onClick={() => setMode('sponsors')}>
-                        <Star size={22} />SPONSORS
-                    </button>
-                    <button className="nav-item" onClick={() => setMode('results')}>
-                        <Trophy size={22} />RESULTS
                     </button>
                     {user?.email === ADMIN_EMAIL && (
                         <button className="nav-item" onClick={() => setMode('admin')}>
