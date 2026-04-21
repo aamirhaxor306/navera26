@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react';
 import { supabase } from './supabase.js';
 import Home from './Home.jsx';
 import Events from './Events.jsx';
-import Sponsors from './Sponsors.jsx';
-import Results from './Results.jsx';
 import Login from './Login.jsx';
 import Admin from './Admin.jsx';
 
@@ -35,8 +33,6 @@ export default function App() {
     switch (mode) {
         case 'login':    return <Login    setMode={setMode} setUser={setUser} />;
         case 'events':   return <Events   {...props} />;
-        case 'sponsors': return <Sponsors {...props} />;
-        case 'results':  return <Results  {...props} />;
         case 'admin':    return isAdminEmail(user?.email) ? <Admin {...props} /> : <Home {...props} />;
         default:         return <Home     {...props} />;
     }

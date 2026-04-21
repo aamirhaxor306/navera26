@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from './supabase.js';
 import { publicUrl } from './publicUrl.js';
-import { Home as HomeIcon, Calendar, Star, Trophy, LogOut, ShieldCheck } from 'lucide-react';
+import { Home as HomeIcon, Calendar, LogOut, ShieldCheck } from 'lucide-react';
 
 const ADMIN_EMAIL = 'adminssb@naverassb.com';
 
@@ -28,8 +28,6 @@ export default function Sponsors({ setMode, handleLogout, user }) {
                 <nav className="sidebar-nav">
                     <button className="nav-item" onClick={() => setMode('home')}><HomeIcon size={22} />HOME</button>
                     <button className="nav-item" onClick={() => setMode('events')}><Calendar size={22} />EVENTS</button>
-                    <button className="nav-item active" onClick={() => setMode('sponsors')}><Star size={22} />SPONSORS</button>
-                    <button className="nav-item" onClick={() => setMode('results')}><Trophy size={22} />RESULTS</button>
                     {user?.email === ADMIN_EMAIL && (
                         <button className="nav-item" onClick={() => setMode('admin')}><ShieldCheck size={22} />ADMIN</button>
                     )}

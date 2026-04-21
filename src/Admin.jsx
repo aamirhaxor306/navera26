@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from './supabase.js';
 import { publicUrl } from './publicUrl.js';
-import { Home as HomeIcon, Calendar, Star, Trophy, LogOut, Users, Plus, Trash2, Edit2, X, Check, ShieldCheck, ClipboardList } from 'lucide-react';
+import { Home as HomeIcon, Calendar, LogOut, Users, Plus, Trash2, Edit2, X, Check, ShieldCheck, ClipboardList } from 'lucide-react';
 
 const ADMIN_EMAIL = 'adminssb@naverassb.com';
 const isAdminEmail = (email) => (email || '').trim().toLowerCase() === ADMIN_EMAIL;
@@ -13,8 +13,6 @@ function Sidebar({ setMode, handleLogout, user, active }) {
             <nav className="sidebar-nav">
                 <button className="nav-item" onClick={() => setMode('home')}><HomeIcon size={22} />HOME</button>
                 <button className="nav-item" onClick={() => setMode('events')}><Calendar size={22} />EVENTS</button>
-                <button className="nav-item" onClick={() => setMode('sponsors')}><Star size={22} />SPONSORS</button>
-                <button className="nav-item" onClick={() => setMode('results')}><Trophy size={22} />RESULTS</button>
                 {isAdminEmail(user?.email) && (
                     <button className={`nav-item ${active === 'admin' ? 'active' : ''}`} onClick={() => setMode('admin')}>
                         <ShieldCheck size={22} />ADMIN
