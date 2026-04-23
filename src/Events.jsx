@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from './supabase.js';
 import { publicUrl } from './publicUrl.js';
-import { Home as HomeIcon, Calendar, LogOut, MapPin, Users, Mail, Phone, ArrowLeft, ShieldCheck, ExternalLink } from 'lucide-react';
+import { Home as HomeIcon, Calendar, LogOut, MapPin, Users, Mail, Phone, ArrowLeft, ShieldCheck, ExternalLink, Trophy } from 'lucide-react';
 
 const ADMIN_EMAIL = 'adminssb@naverassb.com';
 

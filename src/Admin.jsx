@@ -627,8 +627,6 @@ export default function Admin({ setMode, handleLogout, user }) {
     const [tab, setTab] = useState('events');
     const tabs = [
         { key: 'events',        label: 'Events',        icon: <Calendar size={15} /> },
-        { key: 'sponsors',      label: 'Sponsors',      icon: <Star size={15} /> },
-        { key: 'results',       label: 'Results',       icon: <Trophy size={15} /> },
         { key: 'registrations', label: 'Registrations', icon: <ClipboardList size={15} /> },
         { key: 'participants',  label: 'Participants',  icon: <Users size={15} /> },
     ];
@@ -642,7 +640,7 @@ export default function Admin({ setMode, handleLogout, user }) {
                 <div className="admin-header">
                     <div>
                         <h1 className="page-title">ADMIN PANEL</h1>
-                        <p className="page-subtitle">Manage events, sponsors, results and participants</p>
+                        <p className="page-subtitle">Manage events, registrations and participants</p>
                     </div>
                 </div>
 
@@ -655,8 +653,6 @@ export default function Admin({ setMode, handleLogout, user }) {
                 </div>
 
                 {tab === 'events'        && <EventsTab />}
-                {tab === 'sponsors'     && <SponsorsTab />}
-                {tab === 'results'      && <ResultsTab />}
                 {tab === 'registrations'&& <RegistrationsTab />}
                 {tab === 'participants' && <ParticipantsTab />}
             </main>
