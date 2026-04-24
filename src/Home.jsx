@@ -116,6 +116,15 @@ export default function Home({ setMode, handleLogout, user }) {
                     />
                 </div>
 
+                <div className="partner-badge" aria-label="Ecosystem partner">
+                    <span className="partner-badge-label">Ecosystem Partner</span>
+                    <img
+                        src={publicUrl('images/oscode.png')}
+                        alt="OSCode"
+                        className="partner-badge-logo"
+                    />
+                </div>
+
                 <div className="partner-badge" aria-label="Registration partner">
                     <span className="partner-badge-label">Registration partner</span>
                     <img
