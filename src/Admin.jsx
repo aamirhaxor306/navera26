@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from './supabase.js';
 import { publicUrl } from './publicUrl.js';
-import { Home as HomeIcon, Calendar, LogOut, Users, Plus, Trash2, Edit2, X, Check, ShieldCheck, ClipboardList } from 'lucide-react';
+import { Home as HomeIcon, Calendar, LogOut, Users, Plus, Trash2, Edit2, X, Check, ShieldCheck, ClipboardList, ChevronUp, ChevronDown } from 'lucide-react';
 
 const ADMIN_EMAIL = 'adminssb@naverassb.com';
 const isAdminEmail = (email) => (email || '').trim().toLowerCase() === ADMIN_EMAIL;
@@ -48,14 +48,35 @@ function EventsTab() {
     const [loading, setLoading] = useState(true);
     const [showForm, setShowForm] = useState(false);
     const [editing, setEditing] = useState(null);
+    const [savingOrder, setSavingOrder] = useState(false);
     const blank = { name: '', category: '', date: '', description: '', tag: '', location: '', team_size: '', prize_pool: '', unstop_link: '', eligibility: '', host_name: '', host_email: '', host_phone: '' };
     const [form, setForm] = useState(blank);
     const [formError, setFormError] = useState('');
 
     const load = async () => {
         setLoading(true);
-        const { data } = await supabase.from('events').select('*').order('created_at');
-        setEvents(data || []);
+        // Prefer admin-defined ordering if the column exists.
+        // Falls back to created_at for older schemas.
+        const tryOrdered = async () => {
+            const res = await supabase
+                .from('events')
+                .select('*')
+                .order('sort_order', { ascending: true, nullsFirst: false })
+                .order('created_at', { ascending: true });
+            if (res.error) throw res.error;
+            return res.data || [];
+        };
+        const tryCreatedAt = async () => {
+            const res = await supabase.from('events').select('*').order('created_at', { ascending: true });
+            if (res.error) throw res.error;
+            return res.data || [];
+        };
+
+        try {
+            setEvents(await tryOrdered());
+        } catch {
+            setEvents(await tryCreatedAt());
+        }
         setLoading(false);
     };
 
@@ -83,8 +104,14 @@ function EventsTab() {
             const { error } = await supabase.from('events').update(payload).eq('id', editing);
             if (error) { setFormError(error.message); return; }
         } else {
-            const { error } = await supabase.from('events').insert(payload);
-            if (error) { setFormError(error.message); return; }
+            // Attempt to append at the end of a custom order, if supported.
+            const nextSortOrder = (events || []).reduce((m, e) => Math.max(m, Number(e.sort_order) || 0), 0) + 1;
+            const { error: insertErr } = await supabase.from('events').insert({ ...payload, sort_order: nextSortOrder });
+            if (insertErr) {
+                // Older schema: retry without sort_order
+                const { error: retryErr } = await supabase.from('events').insert(payload);
+                if (retryErr) { setFormError(retryErr.message); return; }
+            }
         }
         setShowForm(false);
         load();
@@ -94,6 +121,32 @@ function EventsTab() {
         if (!confirm('Delete this event?')) return;
         await supabase.from('events').delete().eq('id', id);
         load();
+    };
+
+    const persistOrder = async (ordered) => {
+        setSavingOrder(true);
+        try {
+            // Write 1..N sort_order values.
+            const updates = ordered.map((ev, idx) => ({ id: ev.id, sort_order: idx + 1 }));
+            const results = await Promise.all(
+                updates.map(u => supabase.from('events').update({ sort_order: u.sort_order }).eq('id', u.id))
+            );
+            const firstErr = results.find(r => r.error)?.error;
+            if (firstErr) throw firstErr;
+        } catch (e) {
+            alert(`Couldn't save the order. If this is the first time you're using ordering, add an integer column "sort_order" to the Supabase "events" table.\n\nDetails: ${e?.message || 'Unknown error'}`);
+        } finally {
+            setSavingOrder(false);
+        }
+    };
+
+    const move = async (fromIdx, toIdx) => {
+        if (toIdx < 0 || toIdx >= events.length) return;
+        const next = [...events];
+        const [item] = next.splice(fromIdx, 1);
+        next.splice(toIdx, 0, item);
+        setEvents(next);
+        await persistOrder(next);
     };
 
     return (
@@ -107,12 +160,32 @@ function EventsTab() {
                 <div className="admin-table-wrap">
                     <table className="admin-table">
                         <thead>
-                            <tr><th>Name</th><th>Category</th><th>Date</th><th>Location</th><th>Actions</th></tr>
+                            <tr><th>Order</th><th>Name</th><th>Category</th><th>Date</th><th>Location</th><th>Actions</th></tr>
                         </thead>
                         <tbody>
-                            {events.length === 0 && <tr><td colSpan={5} className="admin-empty">No events yet</td></tr>}
-                            {events.map(ev => (
+                            {events.length === 0 && <tr><td colSpan={6} className="admin-empty">No events yet</td></tr>}
+                            {events.map((ev, idx) => (
                                 <tr key={ev.id}>
+                                    <td style={{ width: 92 }}>
+                                        <div className="admin-actions" style={{ gap: 6 }}>
+                                            <button
+                                                onClick={() => move(idx, idx - 1)}
+                                                disabled={savingOrder || idx === 0}
+                                                aria-disabled={savingOrder || idx === 0}
+                                                title="Move up"
+                                            >
+                                                <ChevronUp size={14} />
+                                            </button>
+                                            <button
+                                                onClick={() => move(idx, idx + 1)}
+                                                disabled={savingOrder || idx === events.length - 1}
+                                                aria-disabled={savingOrder || idx === events.length - 1}
+                                                title="Move down"
+                                            >
+                                                <ChevronDown size={14} />
+                                            </button>
+                                        </div>
+                                    </td>
                                     <td>{ev.name}</td>
                                     <td>{ev.category}</td>
                                     <td>{ev.date}</td>

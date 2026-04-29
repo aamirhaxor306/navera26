@@ -227,14 +227,39 @@ export default function Events({ setMode, handleLogout, user }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        supabase.from('events').select('*').order('created_at').then(({ data }) => {
+        const load = async () => {
+            setLoading(true);
+            // Prefer admin-defined ordering if available; fallback to created_at.
+            const tryOrdered = async () => {
+                const res = await supabase
+                    .from('events')
+                    .select('*')
+                    .order('sort_order', { ascending: true, nullsFirst: false })
+                    .order('created_at', { ascending: true });
+                if (res.error) throw res.error;
+                return res.data || [];
+            };
+            const tryCreatedAt = async () => {
+                const res = await supabase.from('events').select('*').order('created_at', { ascending: true });
+                if (res.error) throw res.error;
+                return res.data || [];
+            };
+
+            let data = [];
+            try {
+                data = await tryOrdered();
+            } catch {
+                data = await tryCreatedAt();
+            }
+
             setEvents((data || []).map(ev => ({
                 ...ev,
                 teamSize: ev.team_size,
                 host: { name: ev.host_name, email: ev.host_email, phone: ev.host_phone },
             })));
             setLoading(false);
-        });
+        };
+        load();
     }, []);
 
     if (selectedEvent) {
