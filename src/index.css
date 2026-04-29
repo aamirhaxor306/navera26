@@ -229,7 +229,9 @@ body {
   transform: translateX(-50%);
   display: flex;
   flex-direction: row;
-  align-items: center;
+  /* Keep all partner logos aligned on the same top line.
+     (District has an extra actions area below its logo.) */
+  align-items: flex-start;
   gap: 16px;
   pointer-events: auto;
 }
@@ -247,16 +249,15 @@ body {
   backdrop-filter: none;
   width: 260px;
   min-height: 132px;
-  justify-content: center;
+  justify-content: flex-start;
   box-shadow: none;
   pointer-events: none;
 }
 
 .partner-badge.is-interactive {
   pointer-events: auto;
-  /* Reserve space for absolute-positioned actions (desktop) */
-  padding-bottom: 64px;
-  min-height: 164px;
+  /* Actions are in normal flow on desktop so other badges stay aligned */
+  min-height: 132px;
 }
 
 .partner-badge-label {
@@ -280,15 +281,13 @@ body {
 }
 
 .partner-badge-actions {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 6px;
+  position: static;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
   padding-inline: 10px;
+  margin-top: 6px;
 }
 
 .partner-buy-btn {
