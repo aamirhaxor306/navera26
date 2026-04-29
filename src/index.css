@@ -1696,6 +1696,16 @@ body {
     max-width: 100%;
   }
 
+  /* Partners: keep badge CTA compact on mobile */
+  .partner-buy-btn {
+    width: auto;
+    max-width: none;
+    align-self: center;
+    padding: 8px 14px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
   .hero-content {
     gap: 22px;
     width: 100%;
@@ -1858,6 +1868,11 @@ body {
     flex: 0 1 auto;
     max-width: min(320px, 100%);
     width: 100%;
+  }
+
+  .partner-buy-btn {
+    padding: 8px 12px;
+    font-size: 12px;
   }
 }
 
