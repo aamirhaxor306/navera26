@@ -114,10 +114,12 @@ export default function Home({ setMode, handleLogout, user }) {
                         alt="Get tickets on District by Zomato"
                         className="partner-badge-logo"
                     />
-                    <button className="partner-buy-btn btn btn-primary" type="button" disabled aria-disabled="true">
-                        Buy Ticket
-                    </button>
-                    <span className="partner-coming-soon">Coming soon</span>
+                    <div className="partner-badge-actions" aria-label="Ticketing actions">
+                        <button className="partner-buy-btn btn btn-primary" type="button" disabled aria-disabled="true">
+                            Buy Ticket
+                        </button>
+                        <span className="partner-coming-soon">Coming soon</span>
+                    </div>
                 </div>
 
                 <div className="partner-badge" aria-label="Ecosystem partner">

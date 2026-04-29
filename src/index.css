@@ -240,6 +240,7 @@ body {
   align-items: center;
   gap: 12px;
   padding: 16px 22px 18px;
+  position: relative;
   background: transparent;
   border: none;
   border-radius: 0;
@@ -273,6 +274,18 @@ body {
   max-width: min(200px, calc((100vw - var(--sidebar-width) - 56px) / 2.6));
   object-fit: contain;
   filter: brightness(1.18) contrast(1.06) drop-shadow(0 6px 18px rgba(0, 0, 0, 0.55));
+}
+
+.partner-badge-actions {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding-inline: 10px;
 }
 
 .partner-buy-btn {
@@ -1694,6 +1707,14 @@ body {
     height: 76px;
     max-height: 76px;
     max-width: 100%;
+  }
+
+  .partner-badge-actions {
+    position: static;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    padding-inline: 0;
   }
 
   /* Partners: keep badge CTA compact on mobile */
