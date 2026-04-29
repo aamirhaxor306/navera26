@@ -107,13 +107,17 @@ export default function Home({ setMode, handleLogout, user }) {
 
             {/* Partners — static badges, bottom of Home */}
             <div className="partners-row" role="region" aria-label="Partners">
-                <div className="partner-badge" aria-label="Ticketing partner">
+                <div className="partner-badge is-interactive" aria-label="Ticketing partner">
                     <span className="partner-badge-label">Ticketing partner</span>
                     <img
                         src={publicUrl('images/district.png')}
                         alt="Get tickets on District by Zomato"
                         className="partner-badge-logo"
                     />
+                    <button className="partner-buy-btn btn btn-primary" type="button" disabled aria-disabled="true">
+                        Buy Ticket
+                    </button>
+                    <span className="partner-coming-soon">Coming soon</span>
                 </div>
 
                 <div className="partner-badge" aria-label="Ecosystem partner">

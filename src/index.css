@@ -231,7 +231,7 @@ body {
   flex-direction: row;
   align-items: center;
   gap: 16px;
-  pointer-events: none;
+  pointer-events: auto;
 }
 
 .partner-badge {
@@ -248,6 +248,11 @@ body {
   min-height: 132px;
   justify-content: center;
   box-shadow: none;
+  pointer-events: none;
+}
+
+.partner-badge.is-interactive {
+  pointer-events: auto;
 }
 
 .partner-badge-label {
@@ -268,6 +273,25 @@ body {
   max-width: min(200px, calc((100vw - var(--sidebar-width) - 56px) / 2.6));
   object-fit: contain;
   filter: brightness(1.18) contrast(1.06) drop-shadow(0 6px 18px rgba(0, 0, 0, 0.55));
+}
+
+.partner-buy-btn {
+  padding: 10px 18px;
+  font-size: 13px;
+}
+
+.partner-buy-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.partner-coming-soon {
+  font-size: 11px;
+  letter-spacing: 0.6px;
+  color: rgba(200, 230, 214, 0.72);
+  text-transform: uppercase;
 }
 
 /* ── Hero ── */
