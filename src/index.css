@@ -254,6 +254,9 @@ body {
 
 .partner-badge.is-interactive {
   pointer-events: auto;
+  /* Reserve space for absolute-positioned actions (desktop) */
+  padding-bottom: 64px;
+  min-height: 164px;
 }
 
 .partner-badge-label {
@@ -1715,6 +1718,11 @@ body {
     right: auto;
     bottom: auto;
     padding-inline: 0;
+  }
+
+  .partner-badge.is-interactive {
+    padding-bottom: 12px;
+    min-height: 148px;
   }
 
   /* Partners: keep badge CTA compact on mobile */
