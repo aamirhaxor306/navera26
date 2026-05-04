@@ -7,6 +7,8 @@ const ADMIN_EMAIL = 'adminssb@naverassb.com';
 const EASE_OUT = [0.25, 0.46, 0.45, 0.94];
 
 export default function Home({ setMode, handleLogout, user }) {
+    const DISTRICT_TICKETS_URL = 'https://www.district.in/events/navera26-off-the-clock-may9-2026-buy-tickets';
+
     return (
         <div className="home-wrapper">
 
@@ -115,10 +117,14 @@ export default function Home({ setMode, handleLogout, user }) {
                         className="partner-badge-logo"
                     />
                     <div className="partner-badge-actions" aria-label="Ticketing actions">
-                        <button className="partner-buy-btn btn btn-primary" type="button" disabled aria-disabled="true">
+                        <a
+                            className="partner-buy-btn btn btn-primary"
+                            href={DISTRICT_TICKETS_URL}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
                             Buy Ticket
-                        </button>
-                        <span className="partner-coming-soon">Coming soon</span>
+                        </a>
                     </div>
                 </div>
 
